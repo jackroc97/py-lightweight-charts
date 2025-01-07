@@ -25,4 +25,4 @@ dependencies = [
 where = ["src"]
 
 [tool.setuptools.package-data]
-"*" = ["*.html"]
+"*" = ["*.html", "*.js"]

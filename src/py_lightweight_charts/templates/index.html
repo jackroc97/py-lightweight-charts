@@ -13,81 +13,14 @@
             height: 100%;
             margin: 0;
         }
-        #chart {
+        #chart-container {
             width: 100%;
             height: 100%;
         }
     </style>
 </head>
 <body>
-    <div id="chart"></div>
-    <script>
-        $(document).ready(function() {
-
-            const chartOptions = {
-                width: document.getElementById('chart').clientWidth,
-                height: document.getElementById('chart').clientHight,
-                layout: {
-                    background: { color: '#222' },
-                    textColor: '#DDD',
-                },
-                grid: {
-                    vertLines: { color: '#444' },
-                    horzLines: { color: '#444' },
-                },
-            }
-
-            const chart = LightweightCharts.createChart(
-                document.getElementById('chart'), chartOptions);
-            
-            const dataMap = {};
-            
-            const socket = io();
-            
-            // Expect series to have the an `id` and `name`
-            // Optionally, it may have `data` and `options` properties
-            socket.on('update', (series) => {
-                let data = series.data || {};
-                let options = series.options || {};
-                if (!dataMap[series.id]) {
-                    switch (series.type) {
-                        case 'area':
-                            dataMap[series.id] = chart.addAreaSeries(options);
-                            break;
-                        case 'bar':
-                            dataMap[series.id] = chart.addBarSeries(options);
-                            break;
-                        case 'baseline':
-                            dataMap[series.id] = chart.addBaselineSeries(options);
-                            break;
-                        case 'candlestick':
-                            dataMap[series.id] = chart.addCandlestickSeries(options);
-                            break;
-                        case 'histogram':
-                            dataMap[series.id] = chart.addHistogramSeries(options);
-                            break;
-                        case 'line':
-                            dataMap[series.id] = chart.addLineSeries(options);      
-                            break;
-                        default:
-                            break;
-                    }
-                    dataMap[series.id].setData(data);
-                }
-                else {
-                    dataMap[series.id].update(data);
-                }
-            });
-        });
-
-        // Adding a window resize event handler to resize the chart when
-        // the window size changes.
-        // Note: for more advanced examples (when the chart doesn't fill the entire window)
-        // you may need to use ResizeObserver -> https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver
-        window.addEventListener('resize', () => {
-            chart.resize(window.innerWidth, window.innerHeight);
-        });
-
-    </script>
+    <div id="chart-container"></div>
+    <script src="static/app.js"></script>
 </body>
 </html>
