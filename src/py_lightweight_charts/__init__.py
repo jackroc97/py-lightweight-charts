@@ -1,1 +1,1 @@
-from .chart import *
+from .py_lightweight_charts import *

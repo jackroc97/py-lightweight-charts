@@ -1,12 +1,19 @@
 $(document).ready(function() {
     
+    // Stores charts that are created by the user
     const chartMap = {};
 
+    // Stores series that are created by the user
     const dataMap = {};
-    
+
+    // Websocket connection
     const socket = io();
     
-    socket.on('add_chart', (chart) => {
+    // Let the server know that the client is ready
+    socket.emit('ready');
+
+    // Add a chart to the page
+    socket.on('add_chart', (chart, callback) => {
         // Create a new element for the chart
         chartDiv = document.createElement("div");
         chartDiv.setAttribute("id", chart.id);
@@ -15,11 +22,12 @@ $(document).ready(function() {
         // Create the chart and add it to chartMap so it may be referenced 
         chartMap[chart.id] = LightweightCharts.createChart(
             document.getElementById(chart.id), chart.options);
+
+        callback();
     });
 
-    // Expect series to have the an `id` and `type`
-    // Optionally, it may have `data` and `options` properties
-    socket.on('update_series', (chart, series) => {        
+    // Update series data on a chart
+    socket.on('update_series', (chart, series, data) => {        
         if (!dataMap[series.id]) {
             switch (series.type) {
                 case 'area':
@@ -43,18 +51,10 @@ $(document).ready(function() {
                 default:
                     break;
             }
-            dataMap[series.id].setData(series.data);
+            dataMap[series.id].setData(data);
         }
         else {
-            dataMap[series.id].update(series.data);
+            dataMap[series.id].update(data);
         }
     });
-});
-
-// Adding a window resize event handler to resize the chart when
-// the window size changes.
-// Note: for more advanced examples (when the chart doesn't fill the entire window)
-// you may need to use ResizeObserver -> https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver
-window.addEventListener('resize', () => {
-    chart.resize(window.innerWidth, window.innerHeight);
 });
