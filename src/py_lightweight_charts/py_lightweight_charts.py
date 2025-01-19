@@ -118,22 +118,26 @@ class PyLightweightCharts:
         ev.wait()
         
         
-    def start(self, host: str = '0.0.0.0', port: int = 5000) -> None:
+    def start(self, host: str = '0.0.0.0', port: int = 5000, 
+              daemon: bool = True) -> None:
         """
         Starts the webserver that host the chart application.
 
         Args:
             host (str, optional): Host IP. Defaults to '0.0.0.0'.
             port (int, optional): Port on the host. Defaults to 5000.
+            daemon (bool, optional): Whether or not to run the chart in daemon
+                thread.  Use `daemon = False` for displaying staic data.
+                Defaults to True.
         """
         
         kwargs = {'host': host, 'port': port, 'allow_unsafe_werkzeug': True}
         self.thread = threading.Thread(target=self.socketio.run, 
                                        args=(self.app, ), 
                                        kwargs=kwargs)
-        self.thread.daemon = True
+        self.thread.daemon = daemon
         self.thread.start()
-        
+                
         # Wait for the client to send a "ready" socket message
         # This will block until the client-side script is running 
         # and is ready to accept messages from the server, such as adding
@@ -144,7 +148,7 @@ class PyLightweightCharts:
             nonlocal ev
             ev.set()            
         ev.wait()
-            
+   
             
     def stop(self) -> None:  
         """
