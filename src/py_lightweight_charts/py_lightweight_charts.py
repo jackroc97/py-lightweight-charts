@@ -4,23 +4,54 @@ from dataclasses import dataclass
 from enum import Enum
 from flask import Flask, render_template
 from flask_socketio import SocketIO
+from re import sub
+
+
+def camel_case(s: str) -> str:
+    """
+    Convert a string to camel case (e.g., "Camel Case" -> "camelCase").
+
+    Args:
+        s (str): String to convert to camel case.
+
+    Returns:
+        str: The string in camel case.
+    """
+    s = sub(r"(_|-)+", " ", s).title().replace(" ", "")
+    return ''.join([s[0].lower(), s[1:]])
+
+
+class SeriesMarkerPosition(Enum):
+    ABOVE_BAR = 1,
+    BELOW_BAR = 2,
+    IN_BAR = 3,
+    
+
+class SeriesMarkerShape(Enum):
+    CIRCLE = 1,
+    SQUARE = 2,
+    ARROW_UP = 3,
+    ARROW_DOWN = 4,
 
 
 @dataclass
-class Marker:
+class SeriesMarker:
+    """
+    Represents a marker, such as an arrow or circle, on a series of data.
+    """
     time: int
-    position: str
+    position: SeriesMarkerPosition
+    shape: SeriesMarkerShape
     color: str
-    shape: str
     text: str
     
     
     def to_dict(self) -> dict:
         return {
             'time': self.time,
-            'position': self.position,
+            'position': camel_case(self.position.name),
+            'shape': camel_case(self.shape.name),
             'color': self.color,
-            'shape': self.shape,
             'text': self.text
         }
     
@@ -43,15 +74,18 @@ class Series:
     type: SeriesType
     options: dict = None
     socketio: SocketIO = None
+     
     
-        
-    def set_markers(self, markers: list[Marker]) -> None:
+    def set_markers(self, markers: list[SeriesMarker]) -> None:
         """
         Set markers on the series.
 
         Args:
             markers (list[Marker]): A list of markers to be added to the series.
         """
+        if self.socketio is None:
+            raise Exception("Series must be added to a chart before setting markers.")
+        
         self.socketio.emit('set_markers', (self.id, 
                                            [m.to_dict() for m in markers]))
         
@@ -60,20 +94,19 @@ class Series:
         return {
             'id': self.id,
             'type': self.type.name.lower(),
-            'options': self.options | {}
+            'options': self.options or {}
         }
         
 
+@dataclass
 class Chart:
     """
     Represents a single lightweightcharts Chart object.  Charts are added to the
     app using `PyLightweightCharts.add_chart(...)`.
     """
-    
-    def __init__(self, id: str, options: dict = {}):
-        self.id = id
-        self.options = options
-        self.socketio: SocketIO = None
+    id: str
+    options: dict = None
+    socketio: SocketIO = None
         
 
     def update_series(self, series: Series, data: dict) -> None:
@@ -95,7 +128,7 @@ class Chart:
     def to_dict(self) -> dict:
         return {
             'id': self.id,
-            'options': self.options | {}
+            'options': self.options or {}
         }
 
 

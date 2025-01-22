@@ -31,28 +31,21 @@ if __name__ == '__main__':
     plwc.add_chart(chart)
     
     # These two series will be added to the main chart
-    candles = Series("candles", SeriesType.CANDLESTICK, {})
+    candles = Series("candles", SeriesType.CANDLESTICK)
     volume = Series("volume", SeriesType.HISTOGRAM, { "priceScaleId": "volume" })
     
     # Select data to be displayed on the chart
     df['color'] = ['rgba(38, 166, 154, 0.5)' if c > o else 'rgba(239, 83, 80, 0.5)' for o, c in zip(df['open'], df['close'])]        
     candles_dict = df[['time', 'open', 'high', 'low', 'close']].to_dict('records')
     volume_dict = df[['time', 'volume', 'color']].rename(columns={'volume': 'value'}).to_dict('records')
-    
+        
     chart.update_series(candles, candles_dict)
     chart.update_series(volume, volume_dict)
 
-    t1 = df.iloc[-2]["time"]
-    t2 = time=df.iloc[-5]["time"]
-    
-    print(t1)
-    print(t2)
-    
     # Add some markers to the chart
     markers = [
-        Marker(time=int(df.iloc[-2]["time"]), position='aboveBar', color='rgba(0, 255, 0, 0.5)', shape='arrowUp', text='Buy signal'),
-        Marker(time=int(df.iloc[-5]["time"]), position='belowBar', color='rgba(255, 0, 0, 0.5)', shape='arrowDown', text='Sell signal'),
+        SeriesMarker(time=int(df.iloc[-2]["time"]), position=SeriesMarkerPosition.ABOVE_BAR, color='rgba(0, 255, 0, 0.5)', shape=SeriesMarkerShape.ARROW_UP, text='Buy signal'),
+        SeriesMarker(time=int(df.iloc[-5]["time"]), position=SeriesMarkerPosition.BELOW_BAR, color='rgba(255, 0, 0, 0.5)', shape=SeriesMarkerShape.ARROW_DOWN, text='Sell signal'),
     ]
-
     candles.set_markers(markers)
 
