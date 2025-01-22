@@ -31,7 +31,7 @@ if __name__ == '__main__':
     plwc.add_chart(chart)
     
     # These two series will be added to the main chart
-    candles = Series("candles", SeriesType.CANDLESTICK)
+    candles = Series("candles", SeriesType.CANDLESTICK, {})
     volume = Series("volume", SeriesType.HISTOGRAM, { "priceScaleId": "volume" })
     
     # Select data to be displayed on the chart

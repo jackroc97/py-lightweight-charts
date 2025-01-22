@@ -34,17 +34,16 @@ class SeriesType(Enum):
     LINE = 6,
     
 
+@dataclass
 class Series:
     """
     Represents a series of data to be displayed on the chart.
     """
+    id: str
+    type: SeriesType
+    options: dict = None
+    socketio: SocketIO = None
     
-    def __init__(self, id: str, type: SeriesType, options: dict = {}):
-        self.id = id
-        self.type = type
-        self.socketio: SocketIO = None
-        self.options = options
-        
         
     def set_markers(self, markers: list[Marker]) -> None:
         """
@@ -61,7 +60,7 @@ class Series:
         return {
             'id': self.id,
             'type': self.type.name.lower(),
-            'options': self.options
+            'options': self.options | {}
         }
         
 
@@ -96,7 +95,7 @@ class Chart:
     def to_dict(self) -> dict:
         return {
             'id': self.id,
-            'options': self.options
+            'options': self.options | {}
         }
 
 
