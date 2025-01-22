@@ -26,6 +26,12 @@ $(document).ready(function() {
         callback();
     });
 
+    socket.on('set_markers', (seriesId, markers) => {
+        if (dataMap[seriesId]) {
+            dataMap[seriesId].setMarkers(markers);
+        }
+    });
+
     // Update series data on a chart
     socket.on('update_series', (chart, series, data) => {        
         if (!dataMap[series.id]) {

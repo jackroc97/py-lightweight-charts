@@ -1,9 +1,29 @@
 import threading
 
+from dataclasses import dataclass
 from enum import Enum
 from flask import Flask, render_template
 from flask_socketio import SocketIO
 
+
+@dataclass
+class Marker:
+    time: int
+    position: str
+    color: str
+    shape: str
+    text: str
+    
+    
+    def to_dict(self) -> dict:
+        return {
+            'time': self.time,
+            'position': self.position,
+            'color': self.color,
+            'shape': self.shape,
+            'text': self.text
+        }
+    
 
 class SeriesType(Enum):
     AREA = 1,
@@ -22,7 +42,19 @@ class Series:
     def __init__(self, id: str, type: SeriesType, options: dict = {}):
         self.id = id
         self.type = type
+        self.socketio: SocketIO = None
         self.options = options
+        
+        
+    def set_markers(self, markers: list[Marker]) -> None:
+        """
+        Set markers on the series.
+
+        Args:
+            markers (list[Marker]): A list of markers to be added to the series.
+        """
+        self.socketio.emit('set_markers', (self.id, 
+                                           [m.to_dict() for m in markers]))
         
         
     def to_dict(self) -> dict:
@@ -55,6 +87,7 @@ class Chart:
             series (Series): The series to be added or updated.
             data (dict): The last data point to update the chart with.
         """
+        series.socketio = self.socketio
         self.socketio.emit('update_series', (self.to_dict(), 
                                              series.to_dict(), 
                                              data))
