@@ -34,13 +34,16 @@ if __name__ == '__main__':
     candles = Series("candles", SeriesType.CANDLESTICK)
     volume = Series("volume", SeriesType.HISTOGRAM, { "priceScaleId": "volume" })
     
+    chart.add_series(candles)
+    chart.add_series(volume)
+    
     # Select data to be displayed on the chart
     df['color'] = ['rgba(38, 166, 154, 0.5)' if c > o else 'rgba(239, 83, 80, 0.5)' for o, c in zip(df['open'], df['close'])]        
     candles_dict = df[['time', 'open', 'high', 'low', 'close']].to_dict('records')
     volume_dict = df[['time', 'volume', 'color']].rename(columns={'volume': 'value'}).to_dict('records')
         
-    chart.update_series(candles, candles_dict)
-    chart.update_series(volume, volume_dict)
+    candles.set_data(candles_dict)
+    volume.set_data(volume_dict)
 
     # Add some markers to the chart
     markers = [

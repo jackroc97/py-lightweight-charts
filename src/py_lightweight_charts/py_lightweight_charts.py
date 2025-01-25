@@ -75,6 +75,33 @@ class Series:
     options: dict = None
     socketio: SocketIO = None
      
+     
+    def set_data(self, data: list[dict]) -> None:
+        """
+        Set the data for the series.
+
+        Args:
+            data (list[dict]): A list of dictionaries representing the data to be
+                displayed on the chart.
+        """
+        if self.socketio is None:
+            raise Exception("Series must be added to a chart before setting data.")
+        
+        self.socketio.emit('set_data', (self.id, data))
+        
+        
+    def update(self, data: dict) -> None:
+        """
+        Update the series with new data.
+
+        Args:
+            data (dict): The last data point to update the series with.
+        """
+        if self.socketio is None:
+            raise Exception("Series must be added to a chart before updating data.")
+        
+        self.socketio.emit('update', (self.id, data))
+    
     
     def set_markers(self, markers: list[SeriesMarker]) -> None:
         """
@@ -109,21 +136,16 @@ class Chart:
     socketio: SocketIO = None
         
 
-    def update_series(self, series: Series, data: dict) -> None:
+    def add_series(self, series: Series) -> None:
         """
-        Update a series of data on this chart.  The method is smart such that if
-        the series does not yet exist on the chart, it will be automatically
-        added to the chart.
+        Add a series of data to the chart.
 
         Args:
-            series (Series): The series to be added or updated.
-            data (dict): The last data point to update the chart with.
+            series (Series): The series to be added to the chart.
         """
         series.socketio = self.socketio
-        self.socketio.emit('update_series', (self.to_dict(), 
-                                             series.to_dict(), 
-                                             data))
-        
+        self.socketio.emit('add_series', (self.to_dict(), series.to_dict()))
+
         
     def to_dict(self) -> dict:
         return {

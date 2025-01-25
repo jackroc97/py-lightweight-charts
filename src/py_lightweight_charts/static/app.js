@@ -26,41 +26,50 @@ $(document).ready(function() {
         callback();
     });
 
-    socket.on('set_markers', (seriesId, markers) => {
-        if (dataMap[seriesId]) {
-            dataMap[seriesId].setMarkers(markers);
+    // Add a series to a chart
+    socket.on('add_series', (chart, series) => {
+        switch (series.type) {
+            case 'area':
+                dataMap[series.id] = chartMap[chart.id].addAreaSeries(series.options);
+                break;
+            case 'bar':
+                dataMap[series.id] = chartMap[chart.id].addBarSeries(series.options);
+                break;
+            case 'baseline':
+                dataMap[series.id] = chartMap[chart.id].addBaselineSeries(series.options);
+                break;
+            case 'candlestick':
+                dataMap[series.id] = chartMap[chart.id].addCandlestickSeries(series.options);
+                break;
+            case 'histogram':
+                dataMap[series.id] = chartMap[chart.id].addHistogramSeries(series.options);
+                break;
+            case 'line':
+                dataMap[series.id] = chartMap[chart.id].addLineSeries(series.options);
+                break;
+            default:
+                break;
         }
     });
 
-    // Update series data on a chart
-    socket.on('update_series', (chart, series, data) => {        
-        if (!dataMap[series.id]) {
-            switch (series.type) {
-                case 'area':
-                    dataMap[series.id] = chartMap[chart.id].addAreaSeries(series.options);
-                    break;
-                case 'bar':
-                    dataMap[series.id] = chartMap[chart.id].addBarSeries(series.options);
-                    break;
-                case 'baseline':
-                    dataMap[series.id] = chartMap[chart.id].addBaselineSeries(series.options);
-                    break;
-                case 'candlestick':
-                    dataMap[series.id] = chartMap[chart.id].addCandlestickSeries(series.options);
-                    break;
-                case 'histogram':
-                    dataMap[series.id] = chartMap[chart.id].addHistogramSeries(series.options);
-                    break;
-                case 'line':
-                    dataMap[series.id] = chartMap[chart.id].addLineSeries(series.options);      
-                    break;
-                default:
-                    break;
-            }
-            dataMap[series.id].setData(data);
-        }
-        else {
-            dataMap[series.id].update(data);
+    // Set data for a series
+    socket.on('set_data', (series_id, data) => {
+        console.log("Set data requested");
+        console.log(dataMap[series_id]);
+        dataMap[series_id].setData(data);
+    });
+
+    // Update data for a series
+    socket.on('update', (series_id, data) => {
+        console.log("Update data requested");
+        console.log(dataMap[series_id]);
+        dataMap[series_id].update(data);
+    });
+
+    // Set markers on a series
+    socket.on('set_markers', (seriesId, markers) => {
+        if (dataMap[seriesId]) {
+            dataMap[seriesId].setMarkers(markers);
         }
     });
 });

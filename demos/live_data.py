@@ -29,6 +29,10 @@ if __name__ == '__main__':
     candles = Series("candles", SeriesType.CANDLESTICK, {})
     line1 = Series("line1", SeriesType.LINE, { "color": "#0e69fb" })
     
+    chart.add_series(candles)
+    chart.add_series(line1)
+
+    
     # Create the sub-chart
     chart2_options = chart_options
     chart2_options['height'] = 815.5 - 500
@@ -37,6 +41,8 @@ if __name__ == '__main__':
     
     # This series will be added ot the subchart
     line2 = Series("line2", SeriesType.LINE, { "color": "#0e69fb" })
+
+    chart2.add_series(line2)
 
     # Simulate new data
     while True:
@@ -49,14 +55,14 @@ if __name__ == '__main__':
             "low": 115 + (time.time() % 5),
             "close": 122 + (time.time() % 5),
         }
-        chart.update_series(candles, candle_data)
-        chart.update_series(line1, {
+        candles.update(candle_data)
+        line1.update({
                 "time": time.time(),
                 "value": 122 + (time.time() % 5)
             })
         
         # Update the subchart series
-        chart2.update_series(line2, {
+        line2.update({
                 "time": time.time(),
                 "value": 125 + (time.time() % 5)
             })
