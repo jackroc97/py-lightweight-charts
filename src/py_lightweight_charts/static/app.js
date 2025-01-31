@@ -14,6 +14,9 @@ $(document).ready(function() {
 
     // Add a chart to the page
     socket.on('add_chart', (chart, callback) => {
+        console.log("Add chart requested");
+        console.log(chart);
+
         // Create a new element for the chart
         chartDiv = document.createElement("div");
         chartDiv.setAttribute("id", chart.id);
