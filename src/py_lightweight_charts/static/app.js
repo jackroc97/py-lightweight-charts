@@ -14,11 +14,8 @@ $(document).ready(function() {
 
     // Add a chart to the page
     socket.on('add_chart', (chart, callback) => {
-        console.log("Add chart requested");
-        console.log(chart);
-
         // Create a new element for the chart
-        chartDiv = document.createElement("div");
+        const chartDiv = document.createElement("div");
         chartDiv.setAttribute("id", chart.id);
         document.getElementById("chart-container").appendChild(chartDiv);
 
@@ -31,26 +28,24 @@ $(document).ready(function() {
 
     // Add a series to a chart
     socket.on('add_series', (chart, series) => {
-        console.log("Add series requested");
-        console.log(series);
         switch (series.type) {
             case 'area':
-                dataMap[series.id] = chartMap[chart.id].addAreaSeries(series.options);
+                dataMap[series.id] = chartMap[chart.id].addSeries(LightweightCharts.AreaSeries, series.options);
                 break;
             case 'bar':
-                dataMap[series.id] = chartMap[chart.id].addBarSeries(series.options);
+                dataMap[series.id] = chartMap[chart.id].addSeries(LightweightCharts.BarSeries, series.options);
                 break;
             case 'baseline':
-                dataMap[series.id] = chartMap[chart.id].addBaselineSeries(series.options);
+                dataMap[series.id] = chartMap[chart.id].addSeries(LightweightCharts.BaselineSeries, series.options);
                 break;
             case 'candlestick':
-                dataMap[series.id] = chartMap[chart.id].addCandlestickSeries(series.options);
+                dataMap[series.id] = chartMap[chart.id].addSeries(LightweightCharts.CandlestickSeries, series.options);
                 break;
             case 'histogram':
-                dataMap[series.id] = chartMap[chart.id].addHistogramSeries(series.options);
+                dataMap[series.id] = chartMap[chart.id].addSeries(LightweightCharts.HistogramSeries, series.options);
                 break;
             case 'line':
-                dataMap[series.id] = chartMap[chart.id].addLineSeries(series.options);
+                dataMap[series.id] = chartMap[chart.id].addSeries(LightweightCharts.LineSeries, series.options);
                 break;
             default:
                 break;
@@ -59,25 +54,19 @@ $(document).ready(function() {
 
     // Set data for a series
     socket.on('set_data', (series_id, data) => {
-        console.log("Set data requested");
-        console.log(series_id);
-        console.log(dataMap);
         dataMap[series_id].setData(data);
     });
 
     // Update data for a series
     socket.on('update', (series_id, data) => {
-        console.log("Update data requested");
-        console.log(series_id);
-        console.log(dataMap);
-        console.log(dataMap[series_id]);
         dataMap[series_id].update(data);
     });
 
     // Set markers on a series
     socket.on('set_markers', (seriesId, markers) => {
-        if (dataMap[seriesId]) {
-            dataMap[seriesId].setMarkers(markers);
-        }
+        // TODO: Implement the new setMarkers method which allows
+        // series markers to be udpated.  For now, this will do as a workaround
+        // that emulates v4 behavior.
+        const seriesMarkers = LightweightCharts.createSeriesMarkers(dataMap[seriesId], markers);
     });
 });
