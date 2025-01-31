@@ -23,8 +23,15 @@ $(document).ready(function() {
         document.getElementById("chart-container").appendChild(chartDiv);
 
         // Create the chart and add it to chartMap so it may be referenced 
-        chartMap[chart.id] = LightweightCharts.createChart(
+
+        const chart = LightweightCharts.createChart(
             document.getElementById(chart.id), chart.options);
+        console.log(chart);
+        console.log(chart.addAreaSeries)
+
+        chartMap[chart.id] = chart;
+        console.log(chartMap[chart.id])
+        console.log(chartMap[chart.id].addAreaSeries)
 
         callback();
     });
