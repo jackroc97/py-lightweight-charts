@@ -42,24 +42,29 @@ $(document).ready(function() {
         console.log(series);
         console.log(chart.id);
         console.log(chartMap);
+
+        dataMap[series.id] = chartMap[chart.id].addSeries(LineSeries, )
+
+
+
         switch (series.type) {
             case 'area':
-                dataMap[series.id] = chartMap[chart.id].addAreaSeries(series.options);
+                dataMap[series.id] = chartMap[chart.id].addSeries(AreaSeries, series.options);
                 break;
             case 'bar':
-                dataMap[series.id] = chartMap[chart.id].addBarSeries(series.options);
+                dataMap[series.id] = chartMap[chart.id].addSeries(BarSeries, series.options);
                 break;
             case 'baseline':
-                dataMap[series.id] = chartMap[chart.id].addBaselineSeries(series.options);
+                dataMap[series.id] = chartMap[chart.id].addSeries(BaseLineSeries, series.options);
                 break;
             case 'candlestick':
-                dataMap[series.id] = chartMap[chart.id].addCandlestickSeries(series.options);
+                dataMap[series.id] = chartMap[chart.id].addSeries(CandlestickSeries, series.options);
                 break;
             case 'histogram':
-                dataMap[series.id] = chartMap[chart.id].addHistogramSeries(series.options);
+                dataMap[series.id] = chartMap[chart.id].addSeries(HistogramSeries, series.options);
                 break;
             case 'line':
-                dataMap[series.id] = chartMap[chart.id].addLineSeries(series.options);
+                dataMap[series.id] = chartMap[chart.id].addSeries(LineSeries, series.options);
                 break;
             default:
                 break;
