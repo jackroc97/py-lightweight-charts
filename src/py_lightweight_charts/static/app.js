@@ -33,8 +33,6 @@ $(document).ready(function() {
     socket.on('add_series', (chart, series) => {
         console.log("Add series requested");
         console.log(series);
-        console.log(chart.id);
-        console.log(chartMap);
         switch (series.type) {
             case 'area':
                 dataMap[series.id] = chartMap[chart.id].addAreaSeries(series.options);
@@ -61,13 +59,18 @@ $(document).ready(function() {
 
     // Set data for a series
     socket.on('set_data', (series_id, data) => {
-        console.log("Set data requested for ", series_id);
+        console.log("Set data requested");
+        console.log(series_id);
+        console.log(dataMap);
         dataMap[series_id].setData(data);
     });
 
     // Update data for a series
     socket.on('update', (series_id, data) => {
-        console.log("Update data requested for ", series_id);
+        console.log("Update data requested");
+        console.log(series_id);
+        console.log(dataMap);
+        console.log(dataMap[series_id]);
         dataMap[series_id].update(data);
     });
 
