@@ -27,25 +27,25 @@ $(document).ready(function() {
     });
 
     // Add a series to a chart
-    socket.on('add_series', (chart, series) => {
+    socket.on('add_series', (chart, series, paneId) => {
         switch (series.type) {
             case 'area':
-                dataMap[series.id] = chartMap[chart.id].addSeries(LightweightCharts.AreaSeries, series.options);
+                dataMap[series.id] = chartMap[chart.id].addSeries(LightweightCharts.AreaSeries, series.options, paneId);
                 break;
             case 'bar':
-                dataMap[series.id] = chartMap[chart.id].addSeries(LightweightCharts.BarSeries, series.options);
+                dataMap[series.id] = chartMap[chart.id].addSeries(LightweightCharts.BarSeries, series.options, paneId);
                 break;
             case 'baseline':
-                dataMap[series.id] = chartMap[chart.id].addSeries(LightweightCharts.BaselineSeries, series.options);
+                dataMap[series.id] = chartMap[chart.id].addSeries(LightweightCharts.BaselineSeries, series.options, paneId);
                 break;
             case 'candlestick':
-                dataMap[series.id] = chartMap[chart.id].addSeries(LightweightCharts.CandlestickSeries, series.options);
+                dataMap[series.id] = chartMap[chart.id].addSeries(LightweightCharts.CandlestickSeries, series.options, paneId);
                 break;
             case 'histogram':
-                dataMap[series.id] = chartMap[chart.id].addSeries(LightweightCharts.HistogramSeries, series.options);
+                dataMap[series.id] = chartMap[chart.id].addSeries(LightweightCharts.HistogramSeries, series.options, paneId);
                 break;
             case 'line':
-                dataMap[series.id] = chartMap[chart.id].addSeries(LightweightCharts.LineSeries, series.options);
+                dataMap[series.id] = chartMap[chart.id].addSeries(LightweightCharts.LineSeries, series.options, paneId);
                 break;
             default:
                 break;

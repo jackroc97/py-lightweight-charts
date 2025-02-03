@@ -136,7 +136,7 @@ class Chart:
     socketio: SocketIO = None
         
 
-    def add_series(self, series: Series) -> None:
+    def add_series(self, series: Series, pane_id: int=0) -> None:
         """
         Add a series of data to the chart.
 
@@ -144,7 +144,9 @@ class Chart:
             series (Series): The series to be added to the chart.
         """
         series.socketio = self.socketio
-        self.socketio.emit('add_series', (self.to_dict(), series.to_dict()))
+        self.socketio.emit('add_series', (self.to_dict(), 
+                                          series.to_dict(), 
+                                          pane_id))
 
         
     def to_dict(self) -> dict:
