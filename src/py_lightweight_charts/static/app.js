@@ -1,4 +1,4 @@
-$(document).ready(function() {
+document.addEventListener("DOMContentLoaded", function(event) {
     
     // Stores charts that are created by the user
     const chartMap = {};
