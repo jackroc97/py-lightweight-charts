@@ -175,7 +175,7 @@ class PyLightweightCharts:
     ```
     """
     
-    def __init__(self):
+    def __init__(self, chart_name: str):
         self.app = Flask(__name__)
         self.socketio = SocketIO(self.app)
         self.thread = None
@@ -183,7 +183,7 @@ class PyLightweightCharts:
         # Define routes
         @self.app.route('/')
         def home():
-            return render_template('index.html')
+            return render_template('index.html', title=chart_name)
         
     
     def add_chart(self, chart: Chart) -> None:

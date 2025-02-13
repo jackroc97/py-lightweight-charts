@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function(event) {
     
     // Stores charts that are created by the user
-    const chartMap = {};
+    var mainChart;
 
     // Stores series that are created by the user
     const dataMap = {};
@@ -19,8 +19,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
         chartDiv.setAttribute("id", chart.id);
         document.getElementById("chart-container").appendChild(chartDiv);
 
+        // Set chart to full size of screen automatically
+        chart.options["width"] = document.body.offsetWidth;
+        chart.options["height"] = document.body.offsetHeight;
+
         // Create the chart and add it to chartMap so it may be referenced 
-        chartMap[chart.id] = LightweightCharts.createChart(
+        mainChart = LightweightCharts.createChart(
             document.getElementById(chart.id), chart.options);
 
         callback();
@@ -30,22 +34,22 @@ document.addEventListener("DOMContentLoaded", function(event) {
     socket.on('add_series', (chart, series, paneId) => {
         switch (series.type) {
             case 'area':
-                dataMap[series.id] = chartMap[chart.id].addSeries(LightweightCharts.AreaSeries, series.options, paneId);
+                dataMap[series.id] = mainChart.addSeries(LightweightCharts.AreaSeries, series.options, paneId);
                 break;
             case 'bar':
-                dataMap[series.id] = chartMap[chart.id].addSeries(LightweightCharts.BarSeries, series.options, paneId);
+                dataMap[series.id] = mainChart.addSeries(LightweightCharts.BarSeries, series.options, paneId);
                 break;
             case 'baseline':
-                dataMap[series.id] = chartMap[chart.id].addSeries(LightweightCharts.BaselineSeries, series.options, paneId);
+                dataMap[series.id] = mainChart.addSeries(LightweightCharts.BaselineSeries, series.options, paneId);
                 break;
             case 'candlestick':
-                dataMap[series.id] = chartMap[chart.id].addSeries(LightweightCharts.CandlestickSeries, series.options, paneId);
+                dataMap[series.id] = mainChart.addSeries(LightweightCharts.CandlestickSeries, series.options, paneId);
                 break;
             case 'histogram':
-                dataMap[series.id] = chartMap[chart.id].addSeries(LightweightCharts.HistogramSeries, series.options, paneId);
+                dataMap[series.id] = mainChart.addSeries(LightweightCharts.HistogramSeries, series.options, paneId);
                 break;
             case 'line':
-                dataMap[series.id] = chartMap[chart.id].addSeries(LightweightCharts.LineSeries, series.options, paneId);
+                dataMap[series.id] = mainChart.addSeries(LightweightCharts.LineSeries, series.options, paneId);
                 break;
             default:
                 break;
@@ -69,4 +73,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
         // that emulates v4 behavior.
         const seriesMarkers = LightweightCharts.createSeriesMarkers(dataMap[seriesId], markers);
     });
+
+    // Resize the chart on window resize
+    window.onresize = function() {
+        mainChart.applyOptions({
+            height: window.innerHeight,
+            width: window.innerWidth
+        });
+    };
 });
