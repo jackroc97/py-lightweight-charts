@@ -1,4 +1,5 @@
 import threading
+import webbrowser
 
 from dataclasses import dataclass
 from enum import Enum
@@ -220,12 +221,17 @@ class PyLightweightCharts:
                 Defaults to True.
         """
         
+        self.host = host
+        self.port = port
+        
         kwargs = {'host': host, 'port': port, 'allow_unsafe_werkzeug': True}
         self.thread = threading.Thread(target=self.socketio.run, 
                                        args=(self.app, ), 
                                        kwargs=kwargs)
         self.thread.daemon = daemon
         self.thread.start()
+        
+        threading.Timer(1, self._open_browser).start()
                 
         # Wait for the client to send a "ready" socket message
         # This will block until the client-side script is running 
@@ -244,3 +250,7 @@ class PyLightweightCharts:
         Stop the server.
         """
         self.thread.join()
+        
+    
+    def _open_browser(self):
+      webbrowser.open_new(f"http://127.0.0.1:{self.port}")
