@@ -11,7 +11,6 @@ MarkupSafe==3.0.2
 numpy==2.2.2
 packaging==24.2
 pandas==2.2.3
-py_lightweight_charts @ file:///Users/jrochester/dev/algo_trading/py-lightweight-charts/dist/py_lightweight_charts-0.0.1-py3-none-any.whl#sha256=fe9b2836ed3a884363ed7bf5be9c75b1d40b78c89b1df3c401d4b84737f992ad
 pyproject_hooks==1.2.0
 python-dateutil==2.9.0.post0
 python-engineio==4.11.2
