@@ -1,10 +1,13 @@
+# PyLightweightCharts
+
+A python wrapper for [lightweight-charts](https://github.com/tradingview/lightweight-charts).
 
 ## How to Build & Install this Library
 
 ### Clone this repo from GitHub
 ```bash
 # Clone the py-lightweight charts library
-git clone 
+git clone https://github.com/jackroc97/py-lightweight-charts.git
 cd py-lightweight-charts
 ```
 
