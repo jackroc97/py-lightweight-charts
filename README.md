@@ -25,7 +25,7 @@ npm run build:prod
 ### Build this library
 ```bash
 # Copy the built lightweight-charts library to the `static` folder in py-lightweight-charts
-cp dist/lightweight-charts.standalone.production.mjs ../src/py_lightweight_charts/static
+cp dist/lightweight-charts.standalone.production.js ../src/py_lightweight_charts/static
 
 # Build py-lightweight-charts
 cd ../
