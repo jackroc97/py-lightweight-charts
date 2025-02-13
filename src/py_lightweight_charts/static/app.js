@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         const chartDiv = document.createElement("div");
         chartDiv.setAttribute("id", chart.id);
         document.getElementById("chart-container").appendChild(chartDiv);
+        document.getElementById("chart-container").style.backgroundColor = chart.options?.layout?.background?.color;
 
         // Set chart to full size of screen automatically
         chart.options["width"] = document.body.offsetWidth;

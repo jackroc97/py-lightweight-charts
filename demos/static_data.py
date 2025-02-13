@@ -16,23 +16,30 @@ if __name__ == '__main__':
     
     # Create the main chart
     chart_options = {
-        'height': 500,
-        'width': 1440,
         'layout': {
             'background': { 'color': '#222' },
             'textColor': '#DDD',
+            'attributionLogo': False
         },
         'grid': {
             'vertLines': { 'color': '#444' },
             'horzLines': { 'color': '#444' },
          },
+        'leftPriceScale': {
+            'visible': False,
+            'scaleMargins': {
+                'top': 0.8,
+                'bottom': 0
+            }
+        },
     }
+    
     chart = Chart('main_chart', chart_options)
     plwc.add_chart(chart)
     
     # These two series will be added to the main chart
     candles = Series("candles", SeriesType.CANDLESTICK)
-    volume = Series("volume", SeriesType.HISTOGRAM, { "priceScaleId": "volume" })
+    volume = Series("volume", SeriesType.HISTOGRAM, { "priceScaleId": "left" })
     
     chart.add_series(candles)
     chart.add_series(volume)
