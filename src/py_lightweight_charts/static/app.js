@@ -6,6 +6,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
     // Stores series that are created by the user
     const dataMap = {};
 
+    const markersMap = {};
+
     // Websocket connection
     const socket = io();
     
@@ -67,11 +69,15 @@ document.addEventListener("DOMContentLoaded", function(event) {
     });
 
     // Set markers on a series
-    socket.on('set_markers', (seriesId, markers) => {
+    socket.on('create_markers', (seriesId, markers) => {
         // TODO: Implement the new setMarkers method which allows
         // series markers to be udpated.  For now, this will do as a workaround
         // that emulates v4 behavior.
-        const seriesMarkers = LightweightCharts.createSeriesMarkers(dataMap[seriesId], markers);
+        markersMap[seriesId] = LightweightCharts.createSeriesMarkers(dataMap[seriesId], markers);
+    });
+
+    socket.on('set_markers', (seriesId, markers) => {
+        markersMap[seriesId].setMarkers(markers);
     });
 
     // Resize the chart on window resize

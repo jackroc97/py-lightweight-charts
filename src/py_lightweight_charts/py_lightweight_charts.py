@@ -104,9 +104,26 @@ class Series:
         self.socketio.emit('update', (self.id, data))
     
     
+    def create_markers(self, markers: list[SeriesMarker]) -> None:
+        """
+        Adds markers on the series for the first time.  To update series 
+        markers, call set_markers.  These names are confusing but consistent 
+        with the lightweight-charts library.
+        
+        Args:
+            markers (list[Marker]): A list of markers to be added to the series.
+        """
+        if self.socketio is None:
+            raise Exception("Series must be added to a chart before setting markers.")
+        
+        self.socketio.emit('create_markers', (self.id, 
+                                           [m.to_dict() for m in markers]))
+    
+    
     def set_markers(self, markers: list[SeriesMarker]) -> None:
         """
-        Set markers on the series.
+        Update markers on the series.  The method `create_markers` must have
+        already been called on this series.
 
         Args:
             markers (list[Marker]): A list of markers to be added to the series.

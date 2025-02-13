@@ -11,7 +11,7 @@ if __name__ == '__main__':
     df['time'] = df['date'].astype('int64') // 10**9    
     
     # Construct and start the server
-    plwc = PyLightweightCharts()
+    plwc = PyLightweightCharts("Chart with markers")
     plwc.start(daemon=False)
     
     # Create the main chart
@@ -50,5 +50,11 @@ if __name__ == '__main__':
         SeriesMarker(time=int(df.iloc[-2]["time"]), position=SeriesMarkerPosition.ABOVE_BAR, color='rgba(0, 255, 0, 0.5)', shape=SeriesMarkerShape.ARROW_UP, text='Buy signal'),
         SeriesMarker(time=int(df.iloc[-5]["time"]), position=SeriesMarkerPosition.BELOW_BAR, color='rgba(255, 0, 0, 0.5)', shape=SeriesMarkerShape.ARROW_DOWN, text='Sell signal'),
     ]
-    candles.set_markers(markers)
+    candles.create_markers(markers)
+    
+    new_markers = [
+        SeriesMarker(time=int(df.iloc[-10]["time"]), position=SeriesMarkerPosition.ABOVE_BAR, color='rgba(0, 255, 0, 0.5)', shape=SeriesMarkerShape.ARROW_UP, text='Buy signal'),
+        SeriesMarker(time=int(df.iloc[-12]["time"]), position=SeriesMarkerPosition.BELOW_BAR, color='rgba(255, 0, 0, 0.5)', shape=SeriesMarkerShape.ARROW_DOWN, text='Sell signal'),
+    ]
+    candles.set_markers([*markers, *new_markers])
 

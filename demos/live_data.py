@@ -6,7 +6,7 @@ from py_lightweight_charts import *
 if __name__ == '__main__':
     
     # Construct and start the server
-    plwc = PyLightweightCharts()
+    plwc = PyLightweightCharts("Live data")
     plwc.start()
     
     # Create the main chart

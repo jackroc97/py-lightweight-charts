@@ -11,7 +11,7 @@ if __name__ == '__main__':
     df['time'] = df['date'].astype('int64') // 10**9    
     
     # Construct and start the server
-    plwc = PyLightweightCharts()
+    plwc = PyLightweightCharts("Panes")
     plwc.start(daemon=False)
     
     # Create the main chart
