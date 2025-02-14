@@ -23,8 +23,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
         document.getElementById("chart-container").style.backgroundColor = chart.options?.layout?.background?.color;
 
         // Set chart to full size of screen automatically
-        chart.options["width"] = document.body.offsetWidth;
-        chart.options["height"] = document.body.offsetHeight;
+        if (chart.options["autosize"]) {
+            chart.options["width"] = document.body.offsetWidth;
+            chart.options["height"] = document.body.offsetHeight;
+        }
 
         // Create the chart and add it to chartMap so it may be referenced 
         mainChart = LightweightCharts.createChart(
